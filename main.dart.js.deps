@@ -1,6 +1,11 @@
 file:///home/acdan/Git/Udemy-TC2020FDBWD12/.dart_tool/flutter_build/c60501128bb0a1f1eb3f9a42f488b299/main.dart
 file:///home/acdan/Git/Udemy-TC2020FDBWD12/.packages
+file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/constants.dart
 file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/main.dart
+file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/screens/chat_screen.dart
+file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/screens/login_screen.dart
+file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/screens/registration_screen.dart
+file:///home/acdan/Git/Udemy-TC2020FDBWD12/lib/screens/welcome_screen.dart
 file:///opt/Flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11/lib/collection.dart
 file:///opt/Flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11/lib/src/algorithms.dart
 file:///opt/Flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11/lib/src/canonicalized_map.dart
