@@ -3,13 +3,35 @@ import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome';
+  static const String id = '/';
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller1;
+  Animation animation1;
+
+  @override
+  void initState() {
+    super.initState();
+    controller1 = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this
+    );
+    controller1.forward();
+    animation1 = CurvedAnimation(parent: controller1, curve: Curves.decelerate);
+    controller1.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller1.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: 60.0,
+                    height: animation1.value * 100.0,
                   ),
                 ),
                 Text(
