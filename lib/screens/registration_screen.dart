@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -10,6 +12,10 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +37,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 48.0,
             ),
             TextField(
-              onChanged: (value) => null,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
+              onChanged: (value) => this.email = value,
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Enter your email',
               ),
@@ -40,7 +48,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 8.0,
             ),
             TextField(
-              onChanged: (value) => null,
+              textAlign: TextAlign.center,
+              obscureText: true,
+              onChanged: (value) => this.password = value,
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Enter your password',
               ),
@@ -50,7 +60,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             RoundedButton(
               color: Colors.blueAccent,
-              onPressed: () => null,
+              onPressed: () async {
+                try {
+                  final newUser =
+                      await this._auth.createUserWithEmailAndPassword(
+                            email: this.email,
+                            password: password,
+                          );
+                  if (newUser != null)
+                    Navigator.pushNamed(
+                      context,
+                      ChatScreen.id,
+                    );
+                } catch (e) {
+                  print(e);
+                }
+              },
               text: 'Register',
             ),
           ],

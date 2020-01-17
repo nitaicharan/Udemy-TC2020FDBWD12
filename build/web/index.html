@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>flash_chat</title>
 </head>
+
 <body>
+  <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
   <script src="main.dart.js" type="application/javascript"></script>
-</body>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyA8iNSTEYUKR4bF4MxlmCyTsm7VsSH0oyE",
+      authDomain: "flash-chat-6a031.firebaseapp.com",
+      databaseURL: "https://flash-chat-6a031.firebaseio.com",
+      projectId: "flash-chat-6a031",
+      storageBucket: "flash-chat-6a031.appspot.com",
+      messagingSenderId: "202989909444",
+      appId: "1:202989909444:web:f97248947407f2cbf7e091"
+    };
+    // Iniuialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
 </html>
