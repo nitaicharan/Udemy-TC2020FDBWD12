@@ -19,14 +19,8 @@ class _ChatScreenState extends State<ChatScreen> {
     getCurrentUser();
   }
 
-  void getCurrentUser() async {
-    try {
-      final user = await this._auth.currentUser();
-      if (user != null) loggedInUser = user;
-    } catch (e) {
-      print(e);
-    }
-  }
+  void getCurrentUser() =>
+      this._auth.currentUser().then((user) => this.loggedInUser = user);
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +29,13 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                //Implement logout functionality
-              }),
+            icon: Icon(Icons.close),
+            onPressed: () =>
+                this._auth.signOut().then((value) => Navigator.pop(context)),
+          ),
         ],
         title: Text('⚡️Chat'),
+        centerTitle: true,
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
