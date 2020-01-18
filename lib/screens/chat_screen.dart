@@ -12,20 +12,18 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _firestore = Firestore.instance;
   final _auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
+  final _messageTextController = TextEditingController();
+  String emailLoggedUser;
   bool _showSpinner = false;
-  FirebaseUser loggedInUser;
   String message;
 
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    this._auth.currentUser().then((user) => this.emailLoggedUser = user.email);
   }
-
-  void getCurrentUser() =>
-      this._auth.currentUser().then((user) => this.loggedInUser = user);
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              StreamBuilder<QuerySnapshot>(
-                stream: this._firestore.collection('messages').snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return Center(child: CircularProgressIndicator());
-                  List<Text> messages = [];
-                  snapshot.data.documents.forEach((document) {
-                    messages.add(Text(
-                        '${document.data['text']} from ${document.data['sender']}'));
-                  });
-                  return Column(children: messages);
-                },
-              ),
+              MessagesStream(),
               Container(
                 decoration: kMessageContainerDecoration,
                 child: Row(
@@ -70,19 +56,21 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: <Widget>[
                     Expanded(
                       child: TextField(
+                        controller: this._messageTextController,
                         onChanged: (value) => this.message = value,
                         decoration: kMessageTextFieldDecoration,
                       ),
                     ),
                     FlatButton(
                       onPressed: () {
+                        this._messageTextController.clear();
                         setState(() => this._showSpinner = true);
                         this
                             ._firestore
                             .collection('messages')
                             .add(
                               {
-                                'sender': this.loggedInUser.email,
+                                'sender': this.emailLoggedUser,
                                 'text': this.message,
                               },
                             )
@@ -104,6 +92,80 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MessagesStream extends StatelessWidget {
+  final Firestore _firestore = Firestore.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: this._firestore.collection('messages').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlue,
+            ),
+          );
+        List<MessageBubble> messages = [];
+        snapshot.data.documents.forEach((document) {
+          messages.add(
+            MessageBubble(
+              sender: document['sender'],
+              text: document['text'],
+            ),
+          );
+        });
+        return Expanded(
+          child: ListView(
+            children: messages,
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({this.sender, this.text});
+  final String sender;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Text(
+            this.sender,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.black54,
+            ),
+          ),
+          Material(
+            borderRadius: BorderRadius.circular(10.0),
+            elevation: 5.0,
+            color: Colors.lightBlueAccent,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
