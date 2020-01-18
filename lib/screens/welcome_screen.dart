@@ -20,7 +20,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller1 =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
+        AnimationController(duration: Duration(seconds: 2), vsync: this);
     controller1.forward();
     animation1 = CurvedAnimation(parent: controller1, curve: Curves.decelerate);
     controller1.addListener(() => setState(() {}));
@@ -45,15 +45,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: Container(
-                    child: Image.asset('images/logo.png'),
-                    height: animation1.value * 100.0,
+                Flexible(
+                  child: Hero(
+                    tag: 'logo',
+                    child: Container(
+                      child: Image.asset('images/logo.png'),
+                      height: animation1.value * 100.0,
+                    ),
                   ),
                 ),
                 TypewriterAnimatedTextKit(
                   text: ['Flash Chat'],
+                  speed: Duration(milliseconds: 300),
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
